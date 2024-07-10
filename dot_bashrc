@@ -1,0 +1,66 @@
+#
+# ~/.bashrc
+#
+
+# If not running interactively, don't do anything
+[[ $- != *i* ]] && return
+
+# source .bash_aliases if available
+[[ -f "$HOME/.bash_aliases" ]] && source "$HOME/.bash_aliases"
+
+# source .bash_variables if available
+[[ -f "$HOME/.bash_variables" ]] && source "$HOME/.bash_variables"
+
+# append to history file
+shopt -s histappend
+# case-insensitive globbing
+shopt -s nocaseglob
+# fix minor speelling errors on cd
+shopt -s cdspell
+# resize windows if necessary
+shopt -s checkwinsize
+
+# set max size of bash history and history file
+HISTSIZE=100000
+HISTFILESIZE=1000000
+
+# Whenever displaying the prompt, write the previous line to disk and reload from history_file
+export PROMPT_COMMAND="history -a; history -c; history -r"
+
+# Ignore lines with trailing spaces or duplicates
+HISTCONTROL=ignoreboth
+
+# add color to ls
+alias ls="ls -hF --color=auto"
+
+# add color
+alias grep="grep --color=auto --binary-files=without-match --line-number"
+alias diff="diff --color=auto"
+alias ip="ip -color=auto"
+
+# add progress output to rsync
+alias rsync="rsync --progress"
+
+# colored prompt
+PS1="\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ "
+
+# If this is an xterm set the title to user@host:dir
+case "$TERM" in
+xterm*|rxvt*)
+    PS1="\[\e]0;\u@\h: \w\a\]$PS1"
+    ;;
+*)
+    ;;
+esac
+
+# enable programmable completion features (you don't need to enable
+# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
+# sources /etc/bash.bashrc).
+# Requires the `bash-completion` package to be installed
+if ! shopt -oq posix; then
+  if [ -f /usr/share/bash-completion/bash_completion ]; then
+    . /usr/share/bash-completion/bash_completion
+  elif [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
+  fi
+fi
